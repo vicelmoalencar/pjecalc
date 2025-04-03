@@ -16,7 +16,7 @@ COPY tomcat/lib/ /usr/local/tomcat/lib/
 
 # Criar diretório para dados persistentes
 RUN mkdir -p /usr/local/tomcat/data && \
-    chown -R tomcat:tomcat /usr/local/tomcat/data
+    chmod 777 /usr/local/tomcat/data
 
 # Expor a porta 8080
 EXPOSE 8080
