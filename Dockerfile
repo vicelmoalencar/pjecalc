@@ -23,6 +23,10 @@ COPY tomcat/lib/ /usr/local/tomcat/lib/
 RUN mkdir -p /usr/local/tomcat/data && \
     chmod 777 /usr/local/tomcat/data
 
+# Criar script de inicialização
+RUN echo '#!/bin/bash\ntrap "" TERM INT\ncatalina.sh run' > /usr/local/tomcat/bin/start.sh && \
+    chmod +x /usr/local/tomcat/bin/start.sh
+
 # Expor a porta 8080
 EXPOSE 8080
 
@@ -31,4 +35,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:8080/health.jsp || exit 1
 
 # Comando para iniciar o Tomcat em primeiro plano
-CMD ["catalina.sh", "run"]
+CMD ["/usr/local/tomcat/bin/start.sh"]
