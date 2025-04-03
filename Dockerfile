@@ -5,6 +5,11 @@ FROM tomcat:7-jdk8
 ENV CATALINA_OPTS="-Xmx512m"
 ENV JAVA_OPTS="-Xmx512m"
 
+# Instalar curl para healthcheck
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
+
 # Copiar o arquivo WAR da aplicação
 COPY tomcat/webapps/ROOT/ /usr/local/tomcat/webapps/ROOT/
 
@@ -20,6 +25,10 @@ RUN mkdir -p /usr/local/tomcat/data && \
 
 # Expor a porta 8080
 EXPOSE 8080
+
+# Configurar healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:8080/health.jsp || exit 1
 
 # Comando para iniciar o Tomcat em primeiro plano
 CMD ["catalina.sh", "run"]
