@@ -18,13 +18,8 @@ COPY tomcat/lib/ /usr/local/tomcat/lib/
 RUN mkdir -p /usr/local/tomcat/data && \
     chmod 777 /usr/local/tomcat/data
 
-# Copiar e compilar o wrapper
-COPY TomcatWrapper.java /usr/local/tomcat/bin/
-RUN cd /usr/local/tomcat/bin && \
-    javac -cp "/usr/local/tomcat/lib/*:/usr/local/tomcat/bin/*" TomcatWrapper.java
-
 # Expor a porta 8080
 EXPOSE 8080
 
-# Comando para iniciar usando o wrapper
-CMD ["java", "-cp", "/usr/local/tomcat/lib/*:/usr/local/tomcat/bin", "TomcatWrapper"]
+# Comando para iniciar o Tomcat
+ENTRYPOINT ["catalina.sh", "run"]

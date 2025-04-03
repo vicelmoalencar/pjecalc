@@ -4,9 +4,16 @@ services:
     build: .
     ports:
       - "8080:8080"
-    restart: unless-stopped
+    restart: always
+    stop_grace_period: 1m
     volumes:
       - pjecalc_data:/usr/local/tomcat/data
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
 volumes:
   pjecalc_data:
