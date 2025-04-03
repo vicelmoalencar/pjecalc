@@ -1,0 +1,12 @@
+version: '3'
+services:
+  pjecalc:
+    build: .
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    volumes:
+      - pjecalc_data:/usr/local/tomcat/data
+
+volumes:
+  pjecalc_data:
